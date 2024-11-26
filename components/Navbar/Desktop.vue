@@ -44,7 +44,7 @@
     isLoading.value = true;
     try {
       await $fetch('/auth/logout', { method: 'POST' });
-      router.push('/login');
+      window.location.href = '/login'
     } catch (error) {
       console.error('Erro ao fazer logout:', error);
     } finally {
@@ -59,8 +59,8 @@ const avatarMenuItems = computed(() => {
     ];
   } else {
     return [
-      { label: 'Login', icon: 'pi pi-sign-in', command: () => navigateTo("/login") },
-      { label: 'Registrar', icon: 'pi pi-user-plus', command: () => navigateTo("/registro") },
+      { label: 'Login', icon: 'pi pi-sign-in', command: () => window.location.href = '/login' },
+      { label: 'Registrar', icon: 'pi pi-user-plus', command: () => window.location.href = '/registro' },
     ];
   }
 });
