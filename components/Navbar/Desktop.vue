@@ -36,21 +36,36 @@
   import logo from '../../public/logo.png';
   import { useRoute, useRouter } from '#app';
   
+  const { loggedIn } = useUserSession();
+
   const isLoading = ref(false);
   const avatarMenu = ref(null);
-  
-  const avatarMenuItems = [
-    { label: 'Perfil', icon: 'pi pi-user', command: () => navigateTo("/me") },
-    { label: 'Notificações', icon: 'pi pi-bell' },
-    { label: 'Configurações', icon: 'pi pi-cog', command: () => console.log('Configurações') },
-    { label: 'Sair', icon: 'pi pi-sign-out', command: () => console.log('Sair') },
-  ];
-  
+  const logout = async () => {
+    isLoading.value = true;
+    try {
+      await $fetch('/auth/logout', { method: 'POST' });
+      router.push('/login');
+    } catch (error) {
+      console.error('Erro ao fazer logout:', error);
+    } finally {
+      isLoading.value = false;
+    }
+  };
+const avatarMenuItems = computed(() => {
+  if (loggedIn.value) {
+    return [
+      { label: 'Perfil', icon: 'pi pi-user', command: () => navigateTo("/protected/me") },
+      { label: 'Sair', icon: 'pi pi-sign-out', command: async () => await logout() },
+    ];
+  } else {
+    return [
+      { label: 'Login', icon: 'pi pi-sign-in', command: () => navigateTo("/login") },
+      { label: 'Registrar', icon: 'pi pi-user-plus', command: () => navigateTo("/registro") },
+    ];
+  }
+});
   const links = [
     { href: '/', icon: 'pi pi-home' },
-    { href: '/pedidos', icon: 'pi pi-bookmark' },
-    { href: '/revenue', icon: 'pi pi-chart-line' },
-    { href: '/product/panel', icon: 'pi pi-box' },
   ];
   
   const route = useRoute();

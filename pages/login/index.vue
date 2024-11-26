@@ -1,6 +1,5 @@
 <template>
   <div class="flex justify-center items-center min-h-screen bg-gray-100">
-    <!-- Card de Login -->
     <div class="w-full max-w-md p-6 bg-white rounded-lg shadow-md">
       <h2 class="text-2xl font-bold text-center text-gray-800 mb-6">Bem-vindo!</h2>
 
@@ -15,19 +14,12 @@
 
         <div class="mb-4">
           <label for="password" class="block text-gray-700 font-medium mb-2">Senha</label>
-            <Password 
-              v-model="form.senha" 
-              id="password" 
-              toggleMask 
-              placeholder="Digite sua senha" 
-              class="w-full" 
-              required 
-              :feedback="false"
-            />
-        </div> 
+          <Password v-model="form.senha" id="password" toggleMask placeholder="Digite sua senha" class="w-full" required
+            :feedback="false" />
+        </div>
 
         <div class="mt-6">
-          <Button label="Entrar" type="submit" class="w-full p-button-primary p-button-rounded" />
+          <Button label="Entrar" type="submit" class="w-full p-button-primary p-button-rounded" :loading="isSubmitting"/>
         </div>
       </form>
 
@@ -37,6 +29,9 @@
           <NuxtLink to="/registro" class="text-blue-500 hover:underline">Cadastre-se</NuxtLink>
         </p>
       </div>
+      <div class="text-center mt-4">
+        <a href="/" class="text-blue-500 hover:underline">Voltar para a página inicial</a>
+      </div>
     </div>
   </div>
 </template>
@@ -44,7 +39,6 @@
 <script setup>
 definePageMeta({
   title: "Login",
-  pageTransition: {type: "transition", duration: 1000},
 })
 
 const form = ref({
@@ -53,9 +47,10 @@ const form = ref({
 });
 
 const router = useRouter()
-
+const isSubmitting = ref(false)
 
 const handleSubmit = async () => {
+  isSubmitting.value = true
   try {
     const response = await $fetch("/auth/login", {
       body: form.value,
@@ -65,6 +60,8 @@ const handleSubmit = async () => {
     window.location.href = "/zovo"
   } catch (error) {
     console.error('Erro ao fazer login:', error);
+  } finally {
+    isSubmitting.value = false;
   }
 };
 </script>
@@ -85,7 +82,6 @@ const handleSubmit = async () => {
 }
 
 .p-password .p-password-toggle-icon {
-  right: 1rem; /* Ajusta o botão "olho" */
+  right: 1rem;
 }
-
 </style>

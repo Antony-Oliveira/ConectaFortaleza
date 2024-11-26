@@ -13,9 +13,10 @@ export default defineEventHandler(async (event) => {
     const body = await readBody(event);
 
     const { titulo, descricao, tipo, categoriaId, preco, disponibilidade } = body;
-
+    
     if (!titulo || !descricao || !categoriaId) {
-      throw createError({ statusCode: 400, statusMessage: "Campos obrigatórios faltando." });
+        []
+      throw createError({ statusCode: 400, statusMessage: "Campos obrigatórios faltando.", });
     }
 
     const newService = await prisma.servico.create({

@@ -1,8 +1,9 @@
 import { PrismaClient } from "@prisma/client";
 import { User } from "#auth-utils";
-import auth from "../middleware/auth";
+import { isAuthed } from "../../helpers/auth";
+
 export default defineEventHandler(async (event) => {
-    await auth(event);
+    await isAuthed(event);
     const prisma = new PrismaClient();
     const userId = (await getUserSession(event)).user!.id;
     const body = await readBody(event); 

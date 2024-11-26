@@ -72,6 +72,7 @@
           <!-- Botão de Registro -->
           <div class="mt-6">
             <Button
+              :loading="isSubmitting"
               label="Registrar"
               type="submit"
               class="w-full p-button-success p-button-rounded"
@@ -104,8 +105,11 @@
     telefone: '',
     localizacao: '',
   });
+
+  const isSubmitting = ref(false);
   
   const handleRegister = async () => {
+    isSubmitting.value = true;
     try {
       const response = await $fetch('/auth/registro', {
         method: 'POST',
@@ -113,10 +117,12 @@
       });
   
       console.log('Registro bem-sucedido:', response);
-      navigateTo('/zovo'); 
+      navigateTo('/'); 
     } catch (error) {
       console.error('Erro ao registrar:', error);
       alert('Não foi possível completar o registro. Tente novamente.');
+    }finally{
+      isSubmitting.value = false;
     }
   };
   </script>
