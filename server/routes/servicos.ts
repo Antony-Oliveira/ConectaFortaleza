@@ -6,10 +6,10 @@ export default defineEventHandler(async () => {
     const servicos = await prisma.servico.findMany({
         include: {
             categoria: true,
-            usuario: {
-                select: {
-                    nome: true,
-                    avatarUrl: true,
+            usuario:true,
+            avaliacoes: { // Inclui avaliações do serviço
+                include: {
+                    usuario: true
                 },
             },
         },

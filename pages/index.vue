@@ -44,7 +44,10 @@
               Oferecido por <span class="font-semibold">{{ servico.usuario.nome }}</span>
             </p>
           </div>
-          <Button label="Ver Detalhes" class="p-button-sm mt-6 self-end" />
+          <NuxtLink :to="`/servico/${servico.id}`">
+            <Button label="Ver Detalhes" class="p-button-sm mt-6 self-end" :href="`/details/${servico.id}`" />
+          </NuxtLink> 
+
         </div>
       </div>
     </section>
