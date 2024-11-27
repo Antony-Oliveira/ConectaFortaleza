@@ -57,6 +57,7 @@ export default defineEventHandler(async (event) => {
             user: safeUser,
         })
         return {
+            status: 200,
             success: true,
             message: 'Usuário registrado com sucesso!',
             user: {
