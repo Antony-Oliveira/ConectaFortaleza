@@ -63,7 +63,7 @@
             <label for="telefone" class="block text-gray-700 font-medium mb-1"
               >Telefone</label
             >
-            <InputText v-model="form.telefone" id="telefone" class="w-full" />
+            <InputMask v-model="form.telefone" id="telefone" class="w-full" mask="(99) 99999-9999" />
           </div>
           <div class="mb-4">
             <label for="bio" class="block text-gray-700 font-medium mb-1"
@@ -320,7 +320,7 @@
             </template>
             <template #footer>
               <div class="flex justify-between items-center">
-                <span class="text-sm text-gray-600">
+                <span class="text-sm ">
                   R$
                   {{
                     servico.preco ? servico.preco.toFixed(2) : "Sob consulta"

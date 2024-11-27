@@ -1,25 +1,25 @@
 import { User } from '#auth-utils';
 import { PrismaClient } from '@prisma/client';
-import { H3Error, defineEventHandler, readBody, createError } from 'h3';
+import { defineEventHandler, readBody, createError } from 'h3';
 
 const prisma = new PrismaClient();
 
 export default defineEventHandler(async (event) => {
     try {
         if (event.method !== 'POST') {
-            throw createError({
-                statusCode: 405,
-                statusMessage: 'Método não permitido.',
-            });
+            return { 
+                status: 405, 
+                message: 'Método não permitido.' 
+            };
         }
 
         const { email, senha } = await readBody(event);
 
         if (!email || !senha) {
-            throw createError({
-                statusCode: 400,
-                statusMessage: 'Email e senha são obrigatórios.',
-            });
+            return {
+                status: 400,
+                message: 'Email e senha são obrigatórios.',
+            };
         }
 
         const user = await prisma.usuario.findUnique({
@@ -27,22 +27,22 @@ export default defineEventHandler(async (event) => {
         });
 
         if (!user) {
-            throw createError({
-                statusCode: 400,
-                statusMessage: 'Credenciais inválidas. Email',
-            });
+            return {
+                status: 400,
+                message: 'Email não encontrado.',
+            };
         }
 
         const isPasswordValid = await verifyPassword(user.senha, senha);
 
         if (!isPasswordValid) {
-            throw createError({
-                statusCode: 400,
-                statusMessage: 'Credenciais inválidas. Senha',
-            });
+            return {
+                status: 400,
+                message: 'Senha incorreta.',
+            };
         }
 
-        const safeUser: User = {
+        const safeUser = {
             id: user.id,
             nome: user.nome,
             email: user.email,
@@ -57,28 +57,17 @@ export default defineEventHandler(async (event) => {
             user: safeUser,
         });
 
-        
-        console.log(session);
         return {
-            success: true,
-            zovo: "SIM",
+            status: 200,
             message: 'Login realizado com sucesso!',
-            user: {
-                id: user.id,
-                nome: user.nome,
-                email: user.email,
-            },
+            user: safeUser,
         };
     } catch (error) {
         console.error('Erro ao realizar login:', error);
-
-        if (error instanceof H3Error) {
-            throw error;
-        }
-
-        throw createError({
-            statusCode: 500,
-            statusMessage: 'Erro interno no servidor.',
-        });
+        
+        return {
+            status: 500,
+            message: 'Erro interno no servidor. Tente novamente mais tarde.',
+        };
     }
 });

@@ -5,17 +5,20 @@
 
       <p class="text-gray-600 text-center mb-4">Entre para continuar</p>
 
+      <!-- Exibir erro de validação -->
+      <div v-if="errorMessage" class="text-red-500 text-center mb-4">
+        <p>{{ errorMessage }}</p>
+      </div>
+
       <form @submit.prevent="handleSubmit">
         <div class="mb-4">
           <label for="email" class="block text-gray-700 font-medium mb-2">Email</label>
-          <InputText v-model="form.email" id="email" type="email" placeholder="Digite seu email" class="w-full"
-            required />
+          <InputText v-model="form.email" id="email" type="email" placeholder="Digite seu email" class="w-full" required />
         </div>
 
         <div class="mb-4">
           <label for="password" class="block text-gray-700 font-medium mb-2">Senha</label>
-          <Password v-model="form.senha" id="password" toggleMask placeholder="Digite sua senha" class="w-full" required
-            :feedback="false" />
+          <Password v-model="form.senha" id="password" toggleMask placeholder="Digite sua senha" class="w-full" required :feedback="false" />
         </div>
 
         <div class="mt-6">
@@ -48,23 +51,32 @@ const form = ref({
 
 const router = useRouter()
 const isSubmitting = ref(false)
+const errorMessage = ref(null) 
 
 const handleSubmit = async () => {
   isSubmitting.value = true
+  errorMessage.value = null 
+
   try {
     const response = await $fetch("/auth/login", {
       body: form.value,
       method: "POST"
     });
-    console.log(response.user);
-    window.location.href = "/zovo"
+
+    if (response.success) {
+      console.log(response.user);
+      window.location.href = "/"
+    } else {
+      errorMessage.value = response.message || "Erro desconhecido. Tente novamente."
+    }
   } catch (error) {
-    console.error('Erro ao fazer login:', error);
+    errorMessage.value = error.message || "Erro ao realizar o login."
   } finally {
     isSubmitting.value = false;
   }
 };
 </script>
+
 
 <style>
 .p-password-full {

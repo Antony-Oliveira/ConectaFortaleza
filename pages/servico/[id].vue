@@ -1,102 +1,180 @@
 <template>
-  <div class="min-h-screen bg-gray-50">
-   
-    <section class="container mx-auto py-10 px-6">
-      
-      <div v-if="loading" class="animate-pulse">
-        <div class="h-5 bg-gray-300 rounded w-3/4 mb-4"></div>
-        <div class="h-4 bg-gray-300 rounded mb-3"></div>
-        <div class="h-4 bg-gray-300 rounded w-1/2 mb-4"></div>
-        <div class="h-8 bg-gray-300 rounded w-1/4 mb-3"></div>
-        <div class="h-10 bg-gray-300 rounded mt-6"></div>
+  <div
+    class="min-h-screen bg-gradient-to-r from-blue-50 via-purple-50 to-pink-50"
+  >
+    <section class="container mx-auto py-12 px-6">
+      <div v-if="loading" class="animate-pulse space-y-6">
+        <div class="h-8 bg-gray-300 rounded w-3/4"></div>
+        <div class="h-5 bg-gray-300 rounded w-1/2"></div>
+        <div class="h-6 bg-gray-300 rounded w-3/4"></div>
+        <div class="h-10 bg-gray-300 rounded w-1/4"></div>
+        <div class="h-12 bg-gray-300 rounded mt-6"></div>
       </div>
-      
-      <div v-else class="bg-white rounded-lg shadow-md p-6">
-        <div class="flex items-center">
-          <Avatar :image="mockLogo" class="mr-3" size="large" />
-          <p class="text-gray-800 text-5xl p-2">
-            <span class="font-semibold">{{ servico.usuario.nome }}</span>
-          </p>
-        </div>
-        <h1 class="text-3xl font-bold text-blue-600 mb-4">{{ servico.titulo }}</h1>
-        <p class="text-gray-700 mb-6">{{ servico.descricao }}</p>
-        <p class="text-gray-600 text-sm mb-2">
-          Contato: <span class="font-semibold text-gray-700">{{ servico.usuario.telefone }}</span>
-        </p>
-        <p class="text-gray-600 text-sm mb-2">
-          Email: <span class="font-semibold text-gray-700">{{ servico.usuario.email }}</span>
-        </p>
-        <p class="text-gray-600 text-sm mb-2">
-          Localização: <span class="font-semibold text-gray-700">{{ servico.usuario.localizacao || "Não informado" }}</span>
-        </p>
-        <p class="text-gray-600 text-sm mb-2">
-          Categoria: <span class="font-semibold">{{ servico.categoria.nome }}</span>
-        </p>
-        <p class="text-gray-600 text-sm mb-2">
-          Tipo: <span class="font-semibold">{{ servico.tipo }}</span>
-        </p>
-        <p class="text-gray-600 text-sm mb-2">
-          Disponibilidade: <span class="font-semibold">{{ formatDataDisponibilidade(servico.disponibilidade) }}</span>
 
-        </p>
-        <p class="text-gray-900 font-bold text-xl mb-4">
-          {{ servico.preco ? `R$ ${servico.preco.toFixed(2)}` : "Preço sob consulta" }}
-        </p>
-        <div v-if="servico.avaliacoes && servico.avaliacoes.length > 0" class="mt-6">
-          <h2 class="text-2xl font-semibold text-gray-800 mb-4">Avaliações</h2>
-          <div v-for="avaliacao in servico.avaliacoes" :key="avaliacao.id" class="mb-4">
-            <p class="text-gray-700 mb-2"><span class="font-semibold">{{ avaliacao.usuario }}</span> - {{ formatDataDisponibilidade(avaliacao.data) }}</p>
-            <!-- Exibir Estrelas -->
-            <div class="flex items-center">
-              <span v-for="n in 5" :key="n" :class="getStarClass(n, avaliacao.nota)">
-                ★
-              </span>
-            </div>
-            <p class="text-gray-600 mt-2">{{ avaliacao.comentario }}</p>
+      <div v-else class="bg-white rounded-xl shadow-2xl p-8 space-y-8">
+        <div
+          class="flex items-center space-x-6 border-b-2 border-gray-200 pb-6"
+        >
+          <Avatar :image="mockLogo" class="mr-6" size="xl" />
+          <div>
+            <h2 class="text-4xl font-semibold text-gray-800">
+              {{ servico.usuario.nome }}
+            </h2>
+            <p class="text-gray-500 text-lg mt-2">
+              {{ servico.usuario.bio || "Sem bio" }}
+            </p>
+            <p class="text-gray-800 text-lg mt-2">
+              {{ servico.usuario.email }}
+            </p>
           </div>
         </div>
+
+        <div
+          class="bg-gradient-to-r from-indigo-100 to-blue-100 p-6 rounded-xl shadow-lg"
+        >
+          <h1 class="text-4xl font-bold text-blue-600">{{ servico.titulo }}</h1>
+          <p class="text-gray-700 text-xl mt-2">{{ servico.descricao }}</p>
+
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-8 mt-6">
+            <div class="flex items-center space-x-4">
+              <span class="text-lg text-gray-600 font-semibold"
+                >Categoria:</span
+              >
+              <span class="text-lg text-blue-500">{{
+                servico.categoria.nome
+              }}</span>
+            </div>
+            <div class="flex items-center space-x-4">
+              <span class="text-lg text-gray-600 font-semibold">Tipo:</span>
+              <span class="text-lg text-blue-500">{{ servico.tipo }}</span>
+            </div>
+            <div class="flex items-center space-x-4">
+              <span class="text-lg text-gray-600 font-semibold"
+                >Disponibilidade:</span
+              >
+              <span class="text-lg text-blue-500">{{
+                formatDataDisponibilidade(servico.disponibilidade)
+              }}</span>
+            </div>
+            <div class="flex items-center space-x-4">
+              <span class="text-lg text-gray-600 font-semibold">Preço:</span>
+              <span class="text-xl font-bold text-gray-900">{{
+                servico.preco
+                  ? `R$ ${servico.preco.toFixed(2)}`
+                  : "Sob consulta"
+              }}</span>
+            </div>
+          </div>
+        </div>
+
+        <div
+          v-if="user && servico.usuario.id !== user.id" class="mt-8 p-6 bg-white shadow-lg rounded-xl">
+          <h3 class="text-2xl font-semibold text-gray-800">
+            Deixe sua Avaliação
+          </h3>
+          <div class="space-y-4 mt-4">
+            <Rating
+              v-model="nota"
+              cancel="false"
+              :stars="5"
+              class="text-3xl w-40"
+            />
+
+            <TextArea
+              v-model="comentario"
+              placeholder="Escreva seu comentário aqui..."
+              class="w-full p-4 border rounded-xl mt-4"
+              rows="4"
+            ></TextArea>
+
+            <button
+              @click="enviarAvaliacao"
+              class="w-full py-2 px-4 bg-blue-600 text-white font-semibold rounded-xl mt-4 hover:bg-blue-700 transition-all"
+            >
+              Enviar Avaliação
+            </button>
+          </div>
+        </div>
+
+        <div v-else-if="!loggedIn">
+          <p class="text-gray-600">
+            <NuxtLink to="/login" class="text-blue-600 hover:text-blue-800">Clique aqui para fazer login.</NuxtLink>
+          </p>
+        </div>
+        
+        <div
+          v-if="servico.avaliacoes && servico.avaliacoes.length > 0"
+          class="mt-8"
+        >
+          <h2 class="text-2xl font-semibold text-gray-800">Avaliações</h2>
+          <div
+            v-for="avaliacao in servico.avaliacoes"
+            :key="avaliacao.id"
+            class="bg-white shadow-lg rounded-lg p-6 mb-6 hover:shadow-xl transition-shadow"
+          >
+            <div class="flex items-center space-x-4">
+              <Avatar :image="mockLogo" size="large" />
+              <div>
+                <h4 class="text-lg font-semibold text-gray-800">
+                  {{ avaliacao.usuario.nome }}
+                </h4>
+                <p class="text-sm text-gray-500">
+                  {{ formatDataDisponibilidade(avaliacao.data) }}
+                </p>
+              </div>
+            </div>
+
+            <div class="mt-3">
+              <Rating
+                v-model="avaliacao.nota"
+                :cancel="false"
+                :stars="5"
+                :readonly="true"
+                class="text-3xl"
+              />
+            </div>
+
+            <p v-if="avaliacao.comentario" class="mt-4 text-gray-600">
+              {{ avaliacao.comentario }}
+            </p>
+          </div>
+        </div>
+
+        <div v-else class="text-gray-600">Nenhuma avaliação ainda</div>
       </div>
     </section>
-   
-    
   </div>
 </template>
 
-
 <script setup>
-import { ref, onMounted } from "vue";
+import { ref, onMounted, Text } from "vue";
 import { useRoute } from "vue-router";
-import mockLogo from "~/assets/usermock.png";
+import mockLogo from "../../assets/usermock.png";
 
 const route = useRoute();
+const { user, loggedIn } = useUserSession();
+
+
 const servico = ref(null);
 const loading = ref(true);
-
+const nota = ref(0); 
+const comentario = ref(""); 
 const formatDataDisponibilidade = (data) => {
   if (!data) return "Sob consulta";
-  
+
   const date = new Date(data);
-  
-  // Formatar como dd/mm/yyyy hh:mm
-  return date.toLocaleString('pt-BR', {
-    day: '2-digit',
-    month: '2-digit',
-    year: 'numeric',
-    hour: '2-digit',
-    minute: '2-digit',
+
+  return date.toLocaleString("pt-BR", {
+    day: "2-digit",
+    month: "2-digit",
+    year: "numeric",
+    hour: "2-digit",
+    minute: "2-digit",
   });
 };
-// Função para obter a classe da estrela (preenchida ou vazia)
-const getStarClass = (index, nota) => {
-  if (index <= nota) {
-    return 'text-yellow-500'; // Estrela preenchida
-  } else {
-    return 'text-gray-300'; // Estrela vazia
-  }
-};
-
 
 const getServico = async () => {
+
   try {
     const response = await $fetch(`/getService/${route.params.id}`);
     servico.value = response.servico;
@@ -106,5 +184,78 @@ const getServico = async () => {
     loading.value = false;
   }
 };
+
+const enviarAvaliacao = async () => {
+  if (nota.value === 0 || !comentario.value.trim()) {
+    alert("Por favor, avalie o serviço e adicione um comentário!");
+    return;
+  }
+
+  try {
+    const response = await $fetch(`/postAvaliacao`, {
+      method: "POST",
+      body: JSON.stringify({
+        servicoId: servico.value.id,
+        usuarioId: route.params.userId,
+        nota: nota.value,
+        comentario: comentario.value,
+      }),
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
+
+    if (response.success) {
+      alert("Avaliação enviada com sucesso!");
+      servico.value.avaliacoes.push({
+        id: response.novaAvaliacao.id,
+        usuario: { nome: response.novaAvaliacao.usuario.nome },
+        nota: response.novaAvaliacao.nota,
+        comentario: response.novaAvaliacao.comentario,
+        data: new Date(),
+      });
+      nota.value = 0;
+      comentario.value = "";
+    } else {
+      alert("Erro ao enviar avaliação. Tente novamente.");
+    }
+  } catch (error) {
+    console.error("Erro ao enviar avaliação:", error);
+    alert("Erro ao enviar avaliação.");
+  }
+};
+
 onMounted(() => getServico());
 </script>
+
+<style>
+.p-rating {
+  --p-rating-gap: 0.5rem;
+}
+
+.p-rating {
+  --p-rating-transition-duration: 0.3s;
+}
+
+.p-rating {
+  --p-rating-focus-ring-width: 3px;
+  --p-rating-focus-ring-style: solid;
+  --p-rating-focus-ring-color: #ff5722;
+  --p-rating-focus-ring-offset: 4px;
+  --p-rating-focus-ring-shadow: 0 0 10px rgba(255, 87, 34, 0.5);
+}
+
+.p-rating {
+  --p-rating-icon-size: 2rem;
+}
+
+.p-rating {
+  --p-rating-icon-color: #e0e0e0;
+}
+.p-rating {
+  --p-rating-icon-hover-color: #ff5722;
+}
+.p-rating {
+  --p-rating-icon-active-color: #ff9800;
+}
+</style>

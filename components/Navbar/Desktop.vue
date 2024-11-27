@@ -64,9 +64,12 @@ const avatarMenuItems = computed(() => {
     ];
   }
 });
-  const links = [
-    { href: '/', icon: 'pi pi-home' },
-  ];
+const links = [
+  { href: '/', icon: 'pi pi-home' },
+  { href: 'https://www.linkedin.com', icon: 'pi pi-linkedin' }, 
+  { href: 'https://www.github.com', icon: 'pi pi-github' }, 
+  { href: 'https://www.instagram.com', icon: 'pi pi-instagram' }, 
+];
   
   const route = useRoute();
   const router = useRouter();

@@ -7,18 +7,18 @@ const prisma = new PrismaClient();
 export default defineEventHandler(async (event) => {
     try {
         if (event.method !== 'POST') {
-            throw createError({
-                statusCode: 405,
-                statusMessage: 'Método não permitido.',
-            });
+            return {
+                status: 405,
+                message: 'Método não permitido.',
+            };
         }
         const { nome, email, senha, telefone, localizacao } = await readBody(event);
 
         if (!nome || !email || !senha) {
-            throw createError({
-                statusCode: 400,
-                statusMessage: 'Nome, email e senha são obrigatórios.',
-            });
+            return {
+                status: 400,
+                message: 'Nome, email e senha são obrigatórios.',
+            };
         }
 
         const existingUser = await prisma.usuario.findUnique({
@@ -26,10 +26,10 @@ export default defineEventHandler(async (event) => {
         });
 
         if (existingUser) {
-            throw createError({
-                statusCode: 400,
-                statusMessage: 'Este email já está registrado.',
-            });
+            return {
+                status: 400,
+                message: 'Este email já está registrado.',
+            };
         }
 
         const hashedPassword = await hashPassword(senha);
@@ -66,15 +66,9 @@ export default defineEventHandler(async (event) => {
             },
         };
     } catch (error) {
-        console.error('Erro ao registrar usuário:', error);
-
-        if (error instanceof H3Error) {
-            throw error;
-        }
-
-        throw createError({
-            statusCode: 500,
-            statusMessage: 'Erro interno no servidor.',
-        });
+        return {
+            status: 500,
+            message: 'Erro interno no servidor. Tente novamente mais tarde.',
+        };
     }
 });
