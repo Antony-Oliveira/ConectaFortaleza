@@ -3,7 +3,6 @@
       <DesktopNavbar v-if="isDesktop" :is-active="isActive" />
       <MobileNavbar v-else :is-active="isActive" />
     </div>
-  
     <div :class="isDesktop ? 'flex-1 ml-20 p-1' : 'flex-1 p-1'">
       <slot /> 
     </div>
