@@ -14,7 +14,6 @@
   import DesktopNavbar from './Desktop.vue';
   import MobileNavbar from './Mobile.vue';
   
-  // Detectar o dispositivo
   const isDesktop = ref(false);
   
   const updateDeviceType = () => {
