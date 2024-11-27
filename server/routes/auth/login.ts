@@ -58,6 +58,7 @@ export default defineEventHandler(async (event) => {
         });
 
         return {
+            success: true,
             status: 200,
             message: 'Login realizado com sucesso!',
             user: safeUser,
