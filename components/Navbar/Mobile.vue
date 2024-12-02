@@ -24,9 +24,6 @@ const links = [
         'text-white': !props.isActive(link.href)
       }" class="p-button-text" />
     </NuxtLink>
-    <div class="bg-beige p-0 box-border rounded-full w-12 h-12 flex items-center justify-center">
-      <img :src="logo" alt="Logo" class="object-cover w-full h-full" />
-    </div>
   </div>
 </template>
 
