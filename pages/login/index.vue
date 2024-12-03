@@ -40,9 +40,24 @@
 </template>
 
 <script setup>
-definePageMeta({
+import logo from '/logo-removebg-preview.png'
+
+useHead({
   title: "Login",
-})
+  meta: [
+    {
+      name: "description",
+      content: "Faça login na plataforma Conecta Fortaleza"
+    }
+  ],
+  link: [
+    {
+      rel: "icon",
+      type: "image/x-icon",
+      href: logo
+    }
+  ]
+});
 
 const form = ref({
   email: '',

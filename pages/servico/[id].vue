@@ -1,7 +1,5 @@
 <template>
-  <div
-    class="min-h-screen bg-gradient-to-r from-blue-50 via-purple-50 to-pink-50"
-  >
+  <div class="min-h-screen bg-gradient-to-r from-blue-50 via-purple-50 to-pink-50">
     <section class="container mx-auto py-12 px-6">
       <!-- Loading Placeholder -->
       <div v-if="loading" class="animate-pulse space-y-6">
@@ -15,7 +13,8 @@
       <!-- Conteúdo Principal -->
       <div v-else class="bg-white rounded-xl shadow-2xl p-6 sm:p-8 space-y-6">
         <!-- Informações do Usuário -->
-        <div class="flex flex-col sm:flex-row items-center sm:items-start space-y-4 sm:space-y-0 sm:space-x-6 border-b-2 border-gray-200 pb-6">
+        <div
+          class="flex flex-col sm:flex-row items-center sm:items-start space-y-4 sm:space-y-0 sm:space-x-6 border-b-2 border-gray-200 pb-6">
           <Avatar :image="mockLogo" class="sm:mr-6" size="lg" />
           <div>
             <h2 class="text-2xl sm:text-4xl font-semibold text-gray-800">
@@ -76,45 +75,30 @@
         </div>
 
         <!-- Avaliação -->
-        <div
-          v-if="user && servico.usuario.id !== user.id"
-          class="mt-8 p-4 sm:p-6 bg-white shadow-lg rounded-xl"
-        >
+        <div v-if="user && servico.usuario.id !== user.id" class="mt-8 p-4 sm:p-6 bg-white shadow-lg rounded-xl">
           <h3 class="text-xl sm:text-2xl font-semibold text-gray-800">
             Deixe sua Avaliação
           </h3>
           <div class="space-y-4 mt-4">
             <Rating v-model="nota" cancel="false" :stars="5" class="text-2xl w-32 sm:text-3xl sm:w-40" />
 
-            <TextArea
-              v-model="comentario"
-              placeholder="Escreva seu comentário aqui..."
-              class="w-full p-2 sm:p-4 border rounded-xl"
-              rows="3"
-            ></TextArea>
+            <TextArea v-model="comentario" placeholder="Escreva seu comentário aqui..."
+              class="w-full p-2 sm:p-4 border rounded-xl" rows="3"></TextArea>
 
-            <button
-              @click="enviarAvaliacao"
-              class="w-full py-2 px-4 bg-blue-600 text-white font-semibold rounded-xl mt-4 hover:bg-blue-700 transition-all"
-            >
+            <button @click="enviarAvaliacao"
+              class="w-full py-2 px-4 bg-blue-600 text-white font-semibold rounded-xl mt-4 hover:bg-blue-700 transition-all">
               Enviar Avaliação
             </button>
           </div>
         </div>
 
-        <!-- Avaliações -->
-        <div
-          v-if="servico.avaliacoes && servico.avaliacoes.length > 0"
-          class="mt-8"
-        >
+        <div v-if="servico.avaliacoes && servico.avaliacoes.length > 0" class="mt-8">
+
           <h2 class="text-lg sm:text-2xl font-semibold text-gray-800">
             Avaliações
           </h2>
-          <div
-            v-for="avaliacao in servico.avaliacoes"
-            :key="avaliacao.id"
-            class="bg-white shadow-lg rounded-lg p-4 sm:p-6 mb-6 hover:shadow-xl transition-shadow"
-          >
+          <div v-for="avaliacao in servico.avaliacoes" :key="avaliacao.id"
+            class="bg-white shadow-lg rounded-lg p-4 sm:p-6 mb-6 hover:shadow-xl transition-shadow">
             <div class="flex items-center space-x-4">
               <Avatar :image="mockLogo" size="large" />
               <div>
@@ -128,13 +112,8 @@
             </div>
 
             <div class="mt-3">
-              <Rating
-                v-model="avaliacao.nota"
-                :cancel="false"
-                :stars="5"
-                :readonly="true"
-                class="text-2xl sm:text-3xl"
-              />
+              <Rating v-model="avaliacao.nota" :cancel="false" :stars="5" :readonly="true"
+                class="text-2xl sm:text-3xl" />
             </div>
 
             <p v-if="avaliacao.comentario" class="mt-4 text-sm sm:text-base text-gray-600">
@@ -152,6 +131,8 @@
 import { ref, onMounted, Text } from "vue";
 import { useRoute } from "vue-router";
 import mockLogo from "../../assets/usermock.png";
+import logo from '../../public/logo.png';
+
 
 const route = useRoute();
 const { user, loggedIn } = useUserSession();
@@ -225,7 +206,21 @@ const enviarAvaliacao = async () => {
   }
 };
 
-onMounted(() => getServico());
+onMounted(async () => {
+
+  await getServico()
+
+  useHead({
+  title: servico.value.titulo,
+  link: [
+    {
+      rel: "icon",
+      type: "image/x-icon",
+      href: logo,
+    },
+  ],
+})
+});
 </script>
 
 <style>
@@ -252,9 +247,11 @@ onMounted(() => getServico());
 .p-rating {
   --p-rating-icon-color: #e0e0e0;
 }
+
 .p-rating {
   --p-rating-icon-hover-color: #ff5722;
 }
+
 .p-rating {
   --p-rating-icon-active-color: #ff9800;
 }

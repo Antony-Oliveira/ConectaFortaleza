@@ -346,6 +346,18 @@
 
 <script setup>
 import { ref, reactive, onMounted } from "vue";
+import logo from '/logo-removebg-preview.png'
+
+useHead({
+  title: "Meu perfil",
+  link: [
+    {
+      rel: "icon",
+      type: "image/x-icon",
+      href: logo,
+    },
+  ],
+})
 definePageMeta({
   middleware: "auth",
 });

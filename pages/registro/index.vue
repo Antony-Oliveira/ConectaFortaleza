@@ -95,10 +95,22 @@
 
 <script setup>
 import { ref } from 'vue';
-
-definePageMeta({
-  title: 'Registro',
-  pageTransition: { type: "transition", duration: 1000 },
+import logo from '/logo-removebg-preview.png'
+useHead({
+  title: "Registro",
+  meta: [
+    {
+      name: "description",
+      content: "Crie uma conta na plataforma Conecta Fortaleza"
+    }
+  ],
+  link: [
+    {
+      rel: "icon",
+      type: "image/x-icon",
+      href: logo
+    }
+  ]
 });
 
 const form = ref({
@@ -110,11 +122,11 @@ const form = ref({
 });
 
 const isSubmitting = ref(false);
-const errorMessage = ref(null); // Variável para armazenar mensagens de erro
+const errorMessage = ref(null);
 
 const handleRegister = async () => {
   isSubmitting.value = true;
-  errorMessage.value = null; // Limpa qualquer mensagem de erro anterior
+  errorMessage.value = null;
 
   try {
     const response = await $fetch('/auth/registro', {
