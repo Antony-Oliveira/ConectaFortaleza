@@ -13,15 +13,17 @@ export default defineEventHandler(async (event) => {
     const { id } = event.context.params as any; 
 
     const service = await prisma.servico.findUnique({
-      where: { id: parseInt(id) },
+      where: { id: parseInt(id), }, 
     });
 
-    if (!service || service.usuarioId !== user.id) {
-      throw createError({ statusCode: 403, statusMessage: "Acesso negado." });
+
+    if (service == null || service.usuarioId !== user.id) {
+      console.log(service?.usuarioId, user.id);
+      return { message: "Serviço não encontrado." };
     }
 
     await prisma.servico.delete({
-      where: { id: parseInt(id) },
+      where: { id: parseInt(id) }, 
     });
 
     return { message: "Serviço excluído com sucesso." };
